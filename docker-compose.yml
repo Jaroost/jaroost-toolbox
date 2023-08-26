@@ -1,5 +1,10 @@
 version: "3.8"
 services:
+  keycloak-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
   app:
     command: tail -f /dev/null
     build:
