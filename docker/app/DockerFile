@@ -2,5 +2,7 @@ FROM ruby:3
 WORKDIR /app
 COPY . .
 RUN bundle install
+RUN gem install /app/docker/app/gems/debase-3.0.0.beta.7.gem
+RUN gem install /app/docker/app/gems/ruby-debug-ide-3.0.0.beta.12.1.gem
 #CMD sleep infinity
 #EXPOSE 3000

@@ -1,14 +1,56 @@
 version: "3.8"
 services:
   keycloak-db:
-    image: postgres
+    build:
+      context: .
+      dockerfile: ./docker/keycloak-postgres/Dockerfile
     environment:
       POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
       POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - keycloak_postgres_data:/bitnami/postgresql
+
+  keycloak:
+    build:
+      context: .
+      dockerfile: ./docker/keycloak/Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      KEYCLOAK_CREATE_ADMIN_USER: 'true'
+      KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_DATABASE_VENDOR: 'postgresql'
+      KEYCLOAK_DATABASE_HOST: ${KEYCLOAK_POSTGRES_SERVICE_NAME}
+      KEYCLOAK_DATABASE_PORT: '5432'
+      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_POSTGRES_DB}
+      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_POSTGRES_USER}
+      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+      KEYCLOAK_DATABASE_SCHEMA: 'public'
+      KEYCLOAK_HTTP_PORT: '8080'
+      KEYCLOAK_HTTPS_PORT: '8443'
+      KEYCLOAK_BIND_ADDRESS: '0.0.0.0'
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+
   app:
     command: tail -f /dev/null
     build:
       context: .
-      dockerfile: './docker/app/DockerFile'
+      dockerfile: ./docker/app/DockerFile
     volumes:
       - .:/app
+    depends_on:
+      - keycloak
+
+
+volumes:
+  keycloak_postgres_data:
+    driver: local
