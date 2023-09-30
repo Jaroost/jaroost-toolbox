@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    dotenv (2.8.1)
+    slop (4.10.1)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  dotenv
+  slop
+
+BUNDLED WITH
+   2.3.5

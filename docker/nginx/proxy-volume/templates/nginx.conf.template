@@ -1,0 +1,68 @@
+resolver 127.0.0.11;
+
+server {
+    listen 80 default_server;
+    server_name _;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 3000 default_server;
+}
+
+server {
+    listen       ${APP_PUBLIC_PORT} ssl http2;
+    server_name  localhost
+                 ${APP_PUBLIC_HOST}
+                 0.0.0.0;
+
+    ssl_certificate      ssl/localhost.cer;
+    ssl_certificate_key  ssl/localhost.key;
+
+    client_max_body_size 0;
+
+    # ------------------- DEBUG PAS POUR LA PRODUCTION! ----------------------
+    location /vite-dev/ {
+        set $vite_dev http://${VITE_DEV_SERVICE_NAME}:3036;
+        proxy_pass $vite_dev;
+        proxy_set_header Host $host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+    location /pgadmin4/ {
+        proxy_set_header X-Script-Name /pgadmin4; # https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html#http-via-nginx
+        proxy_set_header Host $host;
+        #ne pas mettre le dernier / à la fin si c'est une variable
+        set $pg_admin http://${PG_ADMIN_SERVICE_NAME}:${PGADMIN_LISTEN_PORT};
+        proxy_pass $pg_admin;
+        proxy_redirect off;
+    }
+
+    location /login/ {
+       #ne pas mettre le dernier / à la fin si c'est une variable
+       set $keycloak https://${KEYCLOAK_SERVICE_NAME}:8443;
+       proxy_pass $keycloak;
+       proxy_redirect off;
+       proxy_set_header Host $host;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $remote_addr;
+       proxy_set_header X-Forwarded-Proto $scheme;
+       proxy_set_header X-Forwarded-Port 443;
+
+       proxy_set_header X-Forwarded-Host $host;
+       proxy_set_header Forwarded "for=$remote_addr;proto=$scheme";
+    }
+
+    #-------------------------------------------------------------------------
+
+    location / {
+        set $ruby_cluster http://${PSP_SERVICE_NAME}:3000;
+        proxy_pass $ruby_cluster;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+}

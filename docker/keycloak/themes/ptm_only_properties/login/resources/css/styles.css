@@ -1,0 +1,27 @@
+button.btn-ptm-primary, a.btn-ptm-primary, input[type=submit].btn-ptm-primary{
+    background: #e8e000;
+    color: #475d66;
+    border-color: #475d66;
+    font-weight: bold;
+}
+
+button.btn-ptm-primary:hover, a.btn-ptm-primary:hover, input[type=submit].btn-ptm-primary:hover{
+    background: #475d66 !important;
+    color: #e8e000 !important;
+    border-color: #475d66;
+    font-weight: bold;
+}
+
+button.btn-ptm-secondary, a.btn-ptm-secondary{
+    background: #475d66 !important;
+    color: #e8e000 !important;
+    border-color: #475d66;
+    font-weight: bold;
+}
+
+button.btn-ptm-secondary:hover, a.btn-ptm-secondary:hover{
+    background: #e8e000 !important;
+    color: #475d66 !important;
+    border-color: #475d66;
+    font-weight: bold;
+}

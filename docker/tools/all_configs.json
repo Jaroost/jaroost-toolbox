@@ -1,0 +1,260 @@
+
+[
+  {
+    "service": "development",
+    "name": "BRANCH",
+    "description": "Current branch"
+  },
+  {
+    "service": "proxy",
+    "name": "APP_PUBLIC_HOST",
+    "description": "Proxy public host"
+  },
+  {
+    "service": "proxy",
+    "name": "APP_PUBLIC_PORT",
+    "description": "Proxy public port",
+    "default": "443",
+    "type":  "integer"
+  },
+  {
+    "service": "app",
+    "name": "USER_ID",
+    "description": "Id of current user (command `id -u`)"
+  },
+  {
+    "service": "app",
+    "name": "USER_GROUP_ID",
+    "description": "Id of current user's grouzp (command `id -g`)"
+  },
+  {
+    "service": "app",
+    "name": "APP_SERVICE_NAME",
+    "description": "App service name in docker-compose",
+    "forced_value": "psp"
+  },
+  {
+    "service": "app",
+    "name": "APP_KEYCLOAK_CLIENT_ID",
+    "description": "Keycloak app client id (administration console --> psp realm --> psp app --> Client ID)"
+  },
+  {
+    "service": "app",
+    "name": "APP_KEYCLOAK_CLIENT_SECRET",
+    "description": "keycloak app client secret (administration console --> psp realm --> psp app --> credentials tab --> Client secret)"
+  },
+  {
+    "service": "app",
+    "name": "APP_KEYCLOAK_SITE",
+    "description": "Keycloak site base host",
+    "default": "https://${APP_PUBLIC_HOST}"
+  },
+  {
+    "service": "app",
+    "name": "APP_KEYCLOAK_REALM",
+    "description": "Keycloak realm name",
+    "default": "psp"
+  },
+  {
+    "service": "app",
+    "name": "APP_KEYCLOAK_BASE_URL",
+    "description": "if keycloak is behind a proxy set the base url (without host) of the keycloak server",
+    "default": "/login"
+  },
+  {
+    "service": "app",
+    "name": "APP_KEYCLOAK_SCOPE",
+    "description": "keycloak scope send by devise when login the user to keycloak server (must match a valid scope in keycloak)",
+    "default": "openid email profile"
+  },
+  {
+    "service": "app",
+    "name": "APP_PROJECT_OS",
+    "description": "Windows or wsl or linux where the project is hosted",
+    "options": [
+      {"value": "windows", "description":  "Windows"},
+      {"value": "WSL", "description":  "wsl"},
+      {"value": "linux", "description":  "linux"}
+    ]
+  },
+  {
+    "service": "vite-dev",
+    "name": "VITE_DEV_SERVICE_NAME",
+    "description": "Vite-dev service name in docker-compose",
+    "forced_value": "vite-dev"
+  },
+  {
+    "service": "vite-dev",
+    "name": "VITE_PUBLIC_HOST_NAME",
+    "description": "Public host for vite (proxy address)",
+    "forced_value": "${APP_PUBLIC_HOST}"
+  },
+  {
+    "service": "vite-dev",
+    "name": "VITE_PUBLIC_HOST_PORT",
+    "description": "Public port for vite (proxy address)",
+    "forced_value": "${APP_PUBLIC_PORT}"
+  },
+
+
+  {
+    "service": "keycloak-postgres",
+    "name": "KEYCLOAK_POSTGRES_SERVICE_NAME",
+    "description": "Keycloak-postgres service name in docker-compose",
+    "forced_value": "keycloak-postgres"
+  },
+  {
+    "service":  "keycloak-postgres",
+    "name":  "KEYCLOAK_POSTGRES_USER",
+    "description":  "Keycloak postgres username",
+    "default":  "keycloak_user"
+  },
+  {
+    "service":  "keycloak-postgres",
+    "name":  "KEYCLOAK_POSTGRES_PASSWORD",
+    "description":  "Keycloak postgres password"
+  },
+  {
+    "service":  "keycloak-postgres",
+    "name":  "KEYCLOAK_POSTGRES_DB",
+    "description":  "Keycloak postgres database name",
+    "default": "keycloak_db"
+  },
+
+
+  {
+    "service": "app-postgres",
+    "name": "APP_POSTGRES_SERVICE_NAME",
+    "description": "App-postgres service name in docker-compose",
+    "forced_value": "app-postgres"
+  },
+  {
+    "service":  "app-postgres",
+    "name":  "APP_POSTGRES_USER",
+    "description":  "App postgres username",
+    "default":  "app_user"
+  },
+  {
+    "service":  "app-postgres",
+    "name":  "APP_POSTGRES_PASSWORD",
+    "description":  "App postgres password"
+  },
+  {
+    "service":  "app-postgres",
+    "name":  "APP_POSTGRES_DB",
+    "description":  "App postgres database name",
+    "default": "app_db"
+  },
+  {
+    "service":  "app-postgres",
+    "name":  "APP_POSTGRES_TEST_DB",
+    "description":  "App postgres test-database name",
+    "default": "app_test_db"
+  },
+
+
+  {
+    "service": "pg-admin",
+    "name": "PG_ADMIN_SERVICE_NAME",
+    "description": "Pg-admin service name in docker-compose",
+    "forced_value": "pg-admin"
+  },
+  {
+    "service":  "pg-admin",
+    "name":  "PGADMIN_DEFAULT_EMAIL",
+    "description":  "This is the email address used when setting up the initial administrator account to login to pgAdmin. This variable is required and must be set at launch time.",
+    "default":  "admin@pg.com"
+  },
+  {
+    "service":  "pg-admin",
+    "name":  "PGADMIN_DEFAULT_PASSWORD",
+    "description":  "This is the password used when setting up the initial administrator account to login to pgAdmin. This variable is required and must be set at launch time."
+  },
+  {
+    "service":  "pg-admin",
+    "name":  "PGADMIN_LISTEN_ADDRESS",
+    "description":  "Specify the local address that the servers listens on. The default should work for most users - in IPv4-only environments, this may need to be set to 0.0.0.0.",
+    "forced_value":  "0.0.0.0"
+  },
+  {
+    "service":  "pg-admin",
+    "name":  "PGADMIN_LISTEN_PORT",
+    "description":  "Allows the port that the server listens on to be set to a specific value rather than using the default.",
+    "default":  "5000",
+    "type":  "integer"
+  },
+
+
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_SERVICE_NAME",
+    "description": "Keycloak service name in docker-compose",
+    "forced_value": "keycloak"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_CREATE_ADMIN_USER",
+    "description": "Create administrator user on boot?",
+    "default": "true",
+    "type":  "boolean"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_ADMIN_USER",
+    "description": "Administrator default user",
+    "default": "keycloak_admin_user"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_ADMIN_PASSWORD",
+    "description": "Administrator default password"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_VENDOR",
+    "description": "database vendor",
+    "default": "postgresql",
+    "options": [
+      {"value": "postgresql", "description":  "Postgres"},
+      {"value": "dev-mem", "description":  "development-only (restart=reset)"},
+      {"value": "dev-file", "description":  "development-only"}
+    ]
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_HOST",
+    "description": "PostgreSQL host",
+    "forced_value": "${KEYCLOAK_POSTGRES_SERVICE_NAME}"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_PORT",
+    "description": "PostgreSQL port",
+    "forced_value": "5432",
+    "type":  "integer"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_NAME",
+    "description": "PostgreSQL database name",
+    "forced_value": "${KEYCLOAK_POSTGRES_DB}"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_USER",
+    "description": "PostgreSQL database user",
+    "forced_value": "${KEYCLOAK_POSTGRES_USER}"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_PASSWORD",
+    "description": "PostgreSQL database password",
+    "forced_value": "${KEYCLOAK_POSTGRES_PASSWORD}"
+  },
+  {
+    "service": "keycloak",
+    "name": "KEYCLOAK_DATABASE_SCHEMA",
+    "description": "PostgreSQL database schema",
+    "default": "public"
+  }
+]
