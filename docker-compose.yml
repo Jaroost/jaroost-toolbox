@@ -1,56 +1,132 @@
-version: "3.8"
+version: '3'
 services:
-  keycloak-db:
-    build:
-      context: .
-      dockerfile: ./docker/keycloak-postgres/Dockerfile
-    environment:
-      POSTGRES_USER: ${KEYCLOAK_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${KEYCLOAK_POSTGRES_DB}
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - keycloak_postgres_data:/bitnami/postgresql
-
   keycloak:
-    build:
-      context: .
-      dockerfile: ./docker/keycloak/Dockerfile
+    image: bitnami/keycloak:latest
+    environment:
+      - KEYCLOAK_PRODUCTION=true
+      - KEYCLOAK_ENABLE_HTTPS=true
+      - KEYCLOAK_HTTPS_USE_PEM=true
+      - KEYCLOAK_HTTPS_CERTIFICATE_FILE=/opt/bitnami/keycloak/certs/localhost.crt
+      - KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE=/opt/bitnami/keycloak/certs/localhost.key
+      - KEYCLOAK_HTTP_RELATIVE_PATH=/login
+      - KEYCLOAK_PROXY=reencrypt
+      #Permet d'activer les endpoints de health checks
+      - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true
+      #Pour désactiver le cache pour les thèmes (permet d'éditer les resources sans devoir redémarrer keycloak)
+      - KEYCLOAK_EXTRA_ARGS_PREPENDED="--spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false"
+    env_file:
+      - .env
     ports:
       - '8080:8080'
-    environment:
-      KEYCLOAK_CREATE_ADMIN_USER: 'true'
-      KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USER}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_DATABASE_VENDOR: 'postgresql'
-      KEYCLOAK_DATABASE_HOST: ${KEYCLOAK_POSTGRES_SERVICE_NAME}
-      KEYCLOAK_DATABASE_PORT: '5432'
-      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_POSTGRES_DB}
-      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_POSTGRES_USER}
-      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-      KEYCLOAK_DATABASE_SCHEMA: 'public'
-      KEYCLOAK_HTTP_PORT: '8080'
-      KEYCLOAK_HTTPS_PORT: '8443'
-      KEYCLOAK_BIND_ADDRESS: '0.0.0.0'
+      - '8443:8443'
+    volumes:
+      - ./docker/keycloak/volume:/opt/bitnami/keycloak/certs
+      - ./docker/keycloak/themes:/opt/bitnami/keycloak/themes
     depends_on:
-      keycloak-db:
+      keycloak-postgres:
         condition: service_healthy
-
-  app:
-    command: tail -f /dev/null
+  pg-admin:
+    #https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html
     build:
-      context: .
-      dockerfile: ./docker/app/DockerFile
+      context: '.'
+      dockerfile: docker/pg-admin/build.Dockerfile
+    volumes:
+      - ./docker/pg-admin/volume:/ptm
+    entrypoint: /ptm/entrypoint.sh
+    env_file:
+      - .env
+    ports:
+      - '${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}'
+  keycloak-postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${KEYCLOAK_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${KEYCLOAK_POSTGRES_DB}
+    env_file:
+      - .env
+    ports:
+      - "5435:5432"
+    volumes:
+      - keycloak-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+  app-postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${APP_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${APP_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${APP_POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - app-postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+  app:
+    build:
+      context: '.'
+      dockerfile: docker/app/debug.Dockerfile
+    command: tail -f /dev/null
+    env_file:
+      - .env
+    environment:
+      VITE_RUBY_HTTPS: "true"
+      VITE_RUBY_HOST: proxy
+      VITE_RUBY_PORT: 443
     volumes:
       - .:/app
+    ports:
+      - "3000:3000"
+      # Ports required for debugging
+      - "1234:1234"
+      - "26166:26168"
+    cap_add: #pour pouvoir mount un share Windows
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
     depends_on:
-      - keycloak
-
-
+      keycloak:
+        condition: service_started
+      vite-dev:
+        condition: service_started
+      app-postgres:
+        condition: service_healthy
+      proxy:
+        condition: service_started
+  vite-dev:
+    build:
+      context: '.'
+      dockerfile: docker/vite/vite.Dockerfile
+    entrypoint: 'bash -c "bin/vite dev"'
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - "3036:3036"
+  proxy:
+    # for debugging purpose
+    #command: sleep infinity
+    build:
+      context: ./docker/nginx/
+      dockerfile: ./nginx-base.Dockerfile
+    ports:
+      - "443:443"
+      - "80:80"
+    env_file:
+      - .env
+    volumes:
+      - ./docker/nginx/proxy-volume/templates:/etc/nginx/templates #Using environment variables in nginx configuration (new in 1.19) from https://hub.docker.com/_/nginx
+      - ./docker/nginx/proxy-volume/ssl:/etc/nginx/ssl
 volumes:
-  keycloak_postgres_data:
-    driver: local
+  keycloak-postgres-data:
+  app-postgres-data:

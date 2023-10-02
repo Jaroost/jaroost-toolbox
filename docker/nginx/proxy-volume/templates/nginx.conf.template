@@ -38,7 +38,7 @@ server {
         proxy_redirect off;
     }
 
-    location /login/ {
+    location /auth/ {
        #ne pas mettre le dernier / à la fin si c'est une variable
        set $keycloak https://${KEYCLOAK_SERVICE_NAME}:8443;
        proxy_pass $keycloak;
@@ -56,7 +56,7 @@ server {
     #-------------------------------------------------------------------------
 
     location / {
-        set $ruby_cluster http://${PSP_SERVICE_NAME}:3000;
+        set $ruby_cluster http://${APP_SERVICE_NAME}:3000;
         proxy_pass $ruby_cluster;
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-Host $host;

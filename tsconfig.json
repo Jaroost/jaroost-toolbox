@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "esnext",
+    "lib": ["ESNext", "DOM"],
+    "esModuleInterop": true,
+    "strict": false,
+    "strictNullChecks": false,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "*": ["/node_modules/*"],
+      "@/*": ["./app/javascript/*"]
+    },
+    "noEmit": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "**/*.ts",
+    "app/javascript/**/*.d.ts"
+  ],
+  "exclude": [
+    "**/dist",
+    "**/node_modules",
+    "**/test",
+    "**/public/vite-test/assets"
+  ]
+}
