@@ -8,7 +8,7 @@ services:
       - KEYCLOAK_HTTPS_USE_PEM=true
       - KEYCLOAK_HTTPS_CERTIFICATE_FILE=/opt/bitnami/keycloak/certs/localhost.crt
       - KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE=/opt/bitnami/keycloak/certs/localhost.key
-      - KEYCLOAK_HTTP_RELATIVE_PATH=/login
+      - KEYCLOAK_HTTP_RELATIVE_PATH=${APP_KEYCLOAK_BASE_URL}
       - KEYCLOAK_PROXY=reencrypt
       #Permet d'activer les endpoints de health checks
       - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true

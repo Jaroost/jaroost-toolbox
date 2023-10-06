@@ -38,7 +38,7 @@ server {
         proxy_redirect off;
     }
 
-    location /auth/ {
+    location ${APP_KEYCLOAK_BASE_URL}/ {
        #ne pas mettre le dernier / à la fin si c'est une variable
        set $keycloak https://${KEYCLOAK_SERVICE_NAME}:8443;
        proxy_pass $keycloak;
