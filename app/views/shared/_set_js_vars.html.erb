@@ -1,0 +1,14 @@
+<script type="text/javascript">
+    var BASE_URL = '<%= root_url.split('?')[0] %>';
+    var BASE_PARAMETERS='?<%= root_url.split('?')[1] if root_url.split('?').count>1 %>';
+    var CURRENT_PARAMETERS='?<%=request.parameters.map{|k, v| "#{k}=#{v}"}.join('&')%>';
+    var LOCALE='locale=<%=I18n.locale%>';
+    var current_locale="<%= I18n.default_locale %>";
+    var user_full_name='achristen' //'<%#=current_full_name%>';
+    var rubyI18nDefaultLocale= "<%= I18n.default_locale %>";
+    var rubyI18nLocale="<%= I18n.locale %>";
+    var is_user_superadmin=true //<%#=can?(:manage, :all)%>;
+    <%if false && current_user%>
+    var user_permissions=<%=current_user.ability.permissions[:can].to_json.html_safe%>
+    <%end %>
+</script>

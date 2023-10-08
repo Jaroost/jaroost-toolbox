@@ -1,0 +1,7 @@
+<ul>
+  <%Keycloak::Client.get_all_users.each do |user| %>
+  <li><%=user.username %>(<%=user.first_name %> <%=user.last_name %>)
+      <%=link_to user.username, impersonate_user_path(keycloak_user_id: user.id) %>
+  </li>
+  <%end %>
+</ul>

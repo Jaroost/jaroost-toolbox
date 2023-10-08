@@ -1,0 +1,1 @@
+Rails.application.config.session_store :cookie_store, key: '_psp_session', secure: true, expire_after: 30.minutes

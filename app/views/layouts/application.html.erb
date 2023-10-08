@@ -1,16 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang='<%=I18n.locale%>'>
   <head>
-    <title>JaroostToolbox</title>
+    <%# Importation des variables javascript %>
+    <%= render 'shared/on_ready_function_script' %>
+    <%= render 'shared/set_js_vars' %>
+
+
+    <%# Importation des styles css %>
+    <%= vite_typescript_tag  'entrypoints/shared/bootstrap.ts'%>
+    <%= vite_typescript_tag  'entrypoints/shared/style-index.ts'%>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= vite_javascript_tag  'i18n-imports'%>
+    <%#= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%#= javascript_importmap_tags %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%# Récupéra du bon entrypoint %>
+    <%if content_for?(:head_packs) %>
+      <%= yield(:head_packs)%>
+    <%else %>
+      <%= vite_javascript_tag  'application'%>
+    <%end %>
+
+
+
   </head>
 
-  <body>
+  <body style="visibility: hidden;">
+  <%= render 'shared/navigation_bar'%>
+  <%= render partial: 'shared/login_redirect'%>
+  <%= render partial: 'shared/flash_messages', flash: flash %>
+
+  <div class="container-fluid" id="content" <%= raw 'data-behavior="vue"' unless @no_vue%>>
     <%= yield %>
+  </div>
+  <%if content_for?(:popover_content) %>
+    <%= yield(:popover_content)%>
+  <% end %>
   </body>
 </html>

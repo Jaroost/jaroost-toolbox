@@ -1,0 +1,6 @@
+fr:
+  keycloak:
+    configuration_reset: "La configuration de keycloak à été rechargée"
+    locale_updated: "La langue a été mise à jour"
+    errors:
+      missing_information: "Les informations de Keycloak sont incomplètes!"

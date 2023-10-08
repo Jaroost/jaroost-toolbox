@@ -1,0 +1,14 @@
+fr:
+  navigation:
+    my_account: 'Mon compte'
+    clients: 'Clients'
+    logout: 'Se déconnecter'
+    reload_keycloak_configuration: 'Recharger la configuration de Keycloak'
+    keycloak_admin_console: 'Administration Keycloak'
+    impersonate: 'Impersonate'
+    impersonate_logout: 'Se déconnecter (impersonation)'
+    sign_in: 'Se connecter'
+    register: "S'enregistrer"
+    locales:
+      fr: 'Français'
+      en: 'English'

@@ -1,0 +1,4 @@
+en:
+  user:
+    connexion_error: "Error while connecting the user!"
+    access_denied: 'Access denied'

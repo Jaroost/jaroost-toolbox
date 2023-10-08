@@ -1,0 +1,25 @@
+<% content_for :head_packs do %>
+  <%=vite_javascript_tag 'application'%>
+  <%=vite_typescript_tag 'entrypoints/grids/grids'%>
+<% end %>
+
+<p style="color: green"><%= notice %></p>
+
+<h1>Clients</h1>
+
+<%=grid(
+     layout_manager(
+       grid_state(
+         id:"clients_index",
+         klass: Client,
+         proxy: remote_proxy(Client),
+         columns: [
+           string_column_definition(Client, 'name', 350, sort_direction: VueGrid::SharedHelper::SORT_DIRECTION_ASC),
+           string_column_definition(Client, 'address', 450),
+         ],
+
+       ),
+     )
+   ) %>
+
+<%= link_to "New client", new_client_path %>

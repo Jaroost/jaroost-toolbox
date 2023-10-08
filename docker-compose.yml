@@ -1,19 +1,21 @@
 version: '3'
 services:
   keycloak:
-    image: bitnami/keycloak:latest
+    image: registry.ptm.net/docker/keycloak-base:latest
     environment:
       - KEYCLOAK_PRODUCTION=true
       - KEYCLOAK_ENABLE_HTTPS=true
       - KEYCLOAK_HTTPS_USE_PEM=true
       - KEYCLOAK_HTTPS_CERTIFICATE_FILE=/opt/bitnami/keycloak/certs/localhost.crt
       - KEYCLOAK_HTTPS_CERTIFICATE_KEY_FILE=/opt/bitnami/keycloak/certs/localhost.key
-      - KEYCLOAK_HTTP_RELATIVE_PATH=${APP_KEYCLOAK_BASE_URL}
+      - KEYCLOAK_HTTP_RELATIVE_PATH=/login
       - KEYCLOAK_PROXY=reencrypt
       #Permet d'activer les endpoints de health checks
       - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true
       #Pour désactiver le cache pour les thèmes (permet d'éditer les resources sans devoir redémarrer keycloak)
       - KEYCLOAK_EXTRA_ARGS_PREPENDED="--spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false"
+      # Récupère les realms présents dans ./docker/keycloak/realms, format .json
+      - KEYCLOAK_EXTRA_ARGS="--import-realm"
     env_file:
       - .env
     ports:
@@ -22,6 +24,7 @@ services:
     volumes:
       - ./docker/keycloak/volume:/opt/bitnami/keycloak/certs
       - ./docker/keycloak/themes:/opt/bitnami/keycloak/themes
+      - ./docker/keycloak/realms:/opt/bitnami/keycloak/data/import
     depends_on:
       keycloak-postgres:
         condition: service_healthy

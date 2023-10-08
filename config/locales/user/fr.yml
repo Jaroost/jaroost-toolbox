@@ -1,0 +1,4 @@
+fr:
+  user:
+    connexion_error: "Erreur lors de la connexion de l'utilisateur!"
+    access_denied: 'Accès refusé'

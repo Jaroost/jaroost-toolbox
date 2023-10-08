@@ -1,0 +1,6 @@
+en:
+  keycloak:
+    configuration_reset: "The Keycloak configuration has been reloaded!"
+    locale_updated: "The locale has been updated!"
+    errors:
+      missing_information: "Keycloak information are missing!"

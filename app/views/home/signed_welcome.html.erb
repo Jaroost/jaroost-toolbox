@@ -1,0 +1,19 @@
+<h1>Welcome <%=current_user.full_name %></h1>
+<p>Please proceed!</p>
+
+<%#=debug Keycloak::Client.execute_actions_email(current_user.uid) %>
+<%#=debug Keycloak::Client.execute_actions_email(current_user.uid) %>
+
+<%#=Keycloak::Client.update_user_required_actions(current_user,  required_actions: [Keycloak::Client::KEYCLOAK_REQUIRED_ACTIONS_ONE_TIME_PASSWORD]) %>
+
+<%#=debug Keycloak::Client.get_user_representation(current_user) %>
+
+<%#
+<!--  user_representation=Keycloak::Client.get_user_representation(current_user)-->
+<!--  user_representation.has_one_time_password=false-->
+<!--  Keycloak::Client.set_user_representation(user_representation)-->
+
+
+%>
+
+<%#=debug Keycloak::Client.get_user_representation(current_user) %>

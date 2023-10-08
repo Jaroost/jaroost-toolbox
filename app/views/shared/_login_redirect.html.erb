@@ -1,0 +1,10 @@
+<%if @must_login %>
+<script>
+    onReadyFunction(function(){
+        let signInButton=document.querySelector(".sign-in");
+        if(signInButton){
+            signInButton.click()
+        }
+    })
+</script>
+<%end %>

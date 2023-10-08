@@ -1,0 +1,7 @@
+<script>
+    console.log(<%= raw @request.to_json %>)
+    console.log(<%= raw @relation.to_sql.to_json %>)
+</script>
+<%=
+    @response.to_json
+%>

@@ -1,0 +1,14 @@
+en:
+  navigation:
+    my_account: 'My account'
+    clients: 'Clients'
+    logout: 'Logout'
+    reload_keycloak_configuration: 'Reload Keycloak configuration'
+    keycloak_admin_console: 'Keycloak administration'
+    impersonate: 'Impersonate'
+    impersonate_logout: 'Impersonation logout'
+    sign_in: 'Sign in'
+    register: 'Register'
+    locales:
+      fr: 'Français'
+      en: 'English'

@@ -1,0 +1,4 @@
+<%= button_to "Sign in with #{OmniAuth::Utils.camelize(:keycloak)}", omniauth_authorize_path(:user, :keycloak), data: { turbo: false }, id:'go' %>
+<script>
+  document.getElementById('go').click();
+</script>

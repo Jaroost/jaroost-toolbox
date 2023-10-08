@@ -1,0 +1,134 @@
+/* CSS Document */
+
+.global-message{
+    text-align: center;
+    font-weight: bold;
+    padding: 2px;
+    position: sticky;
+    z-index:2000;
+    width:100vw;
+    top:0;
+}
+.global-message.warning{
+    background-color: #fdbd00;
+    color: #343940;
+}
+
+.global-message.danger{
+    background-color: #fc5144;
+    color: #f1f1f1;
+}
+
+.is_confidential{
+    font-weight: bold;
+    color: red;
+}
+
+.is_confidential:before,.is_confidential:after{
+    content: ' ⚠ ';
+    font-size: 100%;
+}
+
+.is_not_confidential{
+    font-weight: bold;
+    color: green;
+}
+
+.ok_date{
+    font-weight: bold;
+    color: green;
+}
+
+.ko_date{
+    font-weight: bold;
+    color: red;
+}
+
+.ok_bool{
+    font-weight: bold;
+    color: green;
+}
+
+.ko_bool{
+    font-weight: bold;
+    color: red;
+}
+
+.good_status{
+    font-weight: bold;
+    color: green;
+}
+
+.bad_status{
+    font-weight: bold;
+    color: red;
+}
+
+.primary_status{
+    font-weight: bold;
+    color: blue;
+}
+
+.warning_status{
+    font-weight: bold;
+    color: orange;
+}
+
+.default_status{
+    font-weight: bold;
+    color: black;
+}
+
+.arbo_preparation_status{
+    font-weight: bold;
+    color: black;
+    background: #cccccc;
+    padding: 5px;
+}
+
+.arbo_partiellement_prescrit_status{
+    font-weight: bold;
+    color: black;
+    background: repeating-linear-gradient(
+            45deg,
+            #ffcc80,
+            #ffcc80 20px,
+            #ffffff 20px,
+            #ffffff 30px
+    );
+    padding: 5px;
+}
+
+.arbo_prescrit_status{
+    font-weight: bold;
+    color: black;
+    background: #ffcc80;
+    padding: 5px;
+}
+
+.arbo_partiellement_lancer_status{
+    font-weight: bold;
+    color: black;
+    background: repeating-linear-gradient(
+            45deg,
+            #ffff80,
+            #ffff80 20px,
+            #ffffff 20px,
+            #ffffff 30px
+    );
+    padding: 5px;
+}
+
+.arbo_lancer_status{
+    font-weight: bold;
+    color: black;
+    background: #ffff80;
+    padding: 5px;
+}
+
+.unknown_status_status{
+    font-weight: bold;
+    color: black;
+    background: #ffcccc;
+    padding: 5px;
+}

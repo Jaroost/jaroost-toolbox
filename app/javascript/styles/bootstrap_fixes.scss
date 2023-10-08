@@ -1,0 +1,163 @@
+/*!
+ * boostrap_fixes.scss
+ */
+
+$primary:       #337ab7;
+$secondary:     #475d66;
+$success:       #5cb85c;
+$info:          #91bde3;
+$warning:       #ffa707;
+$danger:        #d9534f;
+$light:         #ECECEC;
+$dark:          #7a7a7a;
+$grey:          #a8a8a8;
+
+$font-family-base: Arial, sans-serif, Helvetica;
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+// @extend #test-utility;
+#test-utility{
+  &:not(#inexistingId1#inexistingId2):after {
+      content: 'CSS used' !important;
+      background-color: magenta !important;
+  }
+}
+
+/*!
+ * Custom rules
+ */
+
+a {
+  text-decoration: none;
+}
+
+
+/*
+ * Button rules
+ */
+
+.btn-sm, .btn-group-sm > .btn {
+  --bs-btn-padding-x: 0.25rem;
+  --bs-btn-padding-y: 0.125rem;
+}
+
+._btn-xs {
+  @extend .btn-sm;
+  margin:1px;
+  --bs-btn-padding-y: 0;
+  line-height: 1rem;
+
+  svg.svg-inline--fa {
+    font-size: 0.75rem;
+    height: 0.75rem;
+  }
+}
+
+._btn-primary {
+  @extend .btn;
+  @extend .btn-primary;
+  @extend .text-white;
+}
+
+._btn-secondary {
+  @extend .btn;
+  @extend .btn-secondary;
+  @extend .text-white;
+}
+
+._btn-default {
+  @extend .btn;
+  @extend .btn-outline-secondary;
+  --bs-btn-border-color: var(--ptm-border-grey);
+  --bs-btn-bg: var(--bs-white)
+}
+
+._btn-success {
+  @extend .btn;
+  @extend .btn-success;
+  @extend .text-white;
+}
+
+._btn-danger {
+  @extend .btn;
+  @extend .btn-danger;
+  @extend .text-white;
+}
+
+._btn-warning {
+  @extend .btn;
+  @extend .btn-warning;
+  color: var(--bs-secondary) !important;
+}
+
+._btn-info {
+  @extend .btn;
+  @extend .btn-info;
+  @extend .text-white;
+}
+
+._btn-transparent {
+  @extend .btn;
+}
+
+._btn-white {
+  @extend .btn;
+  @extend .btn-outline-secondary;
+  @extend .bg-white;
+
+  &:hover {
+    @extend .bg-light;
+    color: var(--bs-dark);
+  }
+
+  --bs-btn-border-color: var(--bs-dark);
+}
+
+._btn-primary-white {
+  @extend .btn;
+  @extend .btn-outline-secondary;
+  @extend .bg-white;
+
+
+  &:hover {
+    @extend .bg-primary;
+    color: var(--bs-dark);
+  }
+
+  --bs-btn-border-color: var(--bs-dark);
+  color: var(--bs-primary);
+}
+
+/*
+ * Button group and toolbar
+ */
+.btn-toolbar {
+  margin-bottom: 0.25em;
+  .btn {
+    margin-left: 0.25em;
+  }
+  .btn:first-child {
+    margin-left: 0;
+  }
+}
+
+.btn-group-vertical {
+  > .btn._btn-wrapper {
+    > .btn {
+      width: 100%;
+      position: relative;
+      flex: 1 1 auto;
+      display: block;
+    }
+    &:not(:last-child) > .btn:not(.dropdown-toggle) {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &:not(:first-child) > .btn:not(.dropdown-toggle) {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      margin-top: -1px;
+    }
+  }
+}

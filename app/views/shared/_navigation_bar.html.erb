@@ -1,0 +1,92 @@
+<style>
+
+    <% if ServerTools.is_development? %>
+    #navigation_bar{
+        background-color: sandybrown !important;
+    }
+    <%else %>
+    #navigation_bar{
+        background-color: #343a40 !important;
+    }
+    <% end %>
+
+    .impersonate{
+        background-color: red;
+    }
+</style>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" bs id="navigation_bar">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="<%=root_path %>">
+      <%=image_tag 'ptm.png' %>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <%if user_signed_in? %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Menu1
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/home/signed_welcome">Signed welcome</a></li>
+            <li><%=link_to t('navigation.clients'),  clients_path, class: 'dropdown-item'%></li>
+          </ul>
+        </li>
+        <%end %>
+      </ul>
+
+      <%if current_user %>
+      <ul class="navbar-nav">
+        <li class="nav-item <%= 'impersonate' if Current.true_user %>">
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%=current_user.full_name %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%=link_to t('navigation.my_account'),  keycloak_account_path, class: 'dropdown-item'%></li>
+              <%if Current.true_user %>
+                <li><%=link_to t('navigation.impersonate_logout'),  keycloak_impersonate_logout_path, class: 'dropdown-item'%></li>
+              <%else %>
+                <li><%=link_to t('navigation.logout'),  keycloak_logout_path, class: 'dropdown-item'%></li>
+              <%end %>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-earth-americas"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%=link_to t('navigation.locales.en'), keycloak_change_locale_path(locale: 'en') , class: current_user.locale=='en' ? 'dropdown-item active': 'dropdown-item'%></li>
+              <li><%=link_to t('navigation.locales.fr'),  keycloak_change_locale_path(locale: 'fr'), class: current_user.locale=='fr' ? 'dropdown-item active': 'dropdown-item'%></li>
+            </ul>
+          </div>
+        </li>
+        <%if can?(:manage, :all) || (Current.true_user &&  Ability.new(Current.true_user).can?(:manage, :all)) %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-gear"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%=link_to t('navigation.reload_keycloak_configuration'),  keycloak_reset_configuration_path, class: 'dropdown-item'%></li>
+              <li><%=link_to t('navigation.keycloak_admin_console'),  keycloak_admin_console_path, class: 'dropdown-item'%></li>
+              <li><%=link_to t('navigation.impersonate'),  keycloak_impersonate_path, class: 'dropdown-item'%></li>
+            </ul>
+          </li>
+        <%end %>
+      </ul>
+      <%else %>
+        <%if Keycloak::Client.get_realm_representation.is_loaded %>
+          <%= button_to t('navigation.sign_in'), keycloak_sign_in_path, data: { turbo: false }, class: 'btn btn-primary ms-1 sign-in'%>
+          <%if Keycloak::Client.get_realm_representation.is_registration_enabled %>
+            <%=link_to t('navigation.register'), keycloak_registration_path, class: 'btn btn-primary ms-1', style: 'appearance: button;'%>
+          <%end %>
+        <%end %>
+      <%end %>
+    </div>
+  </div>
+</nav>
